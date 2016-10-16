@@ -90,7 +90,23 @@ namespace IdentitySample.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = userViewModel.Email, Email = userViewModel.Email };
+                var user = new ApplicationUser
+                {
+                    UserName = userViewModel.Email,
+                    Email = userViewModel.Email,
+                    FirstName= userViewModel.firstName,
+                    LastName = userViewModel.lastName, 
+                    security1 = userViewModel.security1, 
+                    security2=userViewModel.security2, 
+                    securityq1=userViewModel.securityq1, 
+                    securityq2=userViewModel.securityq2
+                };
+                user.FirstName = userViewModel.firstName;
+                user.LastName = userViewModel.lastName;
+                user.securityq2 = userViewModel.securityq2;
+                user.securityq1 = userViewModel.securityq1;
+                user.security2 = userViewModel.security2;
+                user.security1 = userViewModel.security1;
                 var adminresult = await UserManager.CreateAsync(user, userViewModel.Password);
 
                 //Add User to the selected Roles 
@@ -140,6 +156,12 @@ namespace IdentitySample.Controllers
             {
                 Id = user.Id,
                 Email = user.Email,
+                firstName=user.FirstName, 
+                lastName=user.LastName, 
+                security1=user.security1, 
+                security2=user.security2, 
+                securityq1=user.securityq1, 
+                securityq2=user.securityq2, 
                 RolesList = RoleManager.Roles.ToList().Select(x => new SelectListItem()
                 {
                     Selected = userRoles.Contains(x.Name),
@@ -153,7 +175,7 @@ namespace IdentitySample.Controllers
         // POST: /Users/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Email,Id")] EditUserViewModel editUser, params string[] selectedRole)
+        public async Task<ActionResult> Edit([Bind(Include = "Email,Id, firstName, lastName, security1, security2, securityq1, securityq2")] EditUserViewModel editUser, params string[] selectedRole)
         {
             if (ModelState.IsValid)
             {
@@ -165,6 +187,12 @@ namespace IdentitySample.Controllers
 
                 user.UserName = editUser.Email;
                 user.Email = editUser.Email;
+                user.FirstName = editUser.firstName;
+                user.LastName = editUser.lastName;
+                user.securityq2 = editUser.securityq2;
+                user.securityq1 = editUser.securityq1;
+                user.security2 = editUser.security2;
+                user.security1 = editUser.security1; 
 
                 var userRoles = await UserManager.GetRolesAsync(user.Id);
 
